@@ -38,7 +38,7 @@ module.exports = function(grunt) {
 		                        archive: 'packages/theme_'+theme+'_'+(grunt.option('theme_version') || '1.0.0')+'.zip'
 		                    },
 		                    files: [
-                                {src: ['tmp/'+theme+'/**'], dest: '/'}
+                                {expand: true, cwd: 'tmp/', src: [theme+'/**'], dest: '/'}
                             ]
 	                    }
                     }
