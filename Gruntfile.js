@@ -10,7 +10,22 @@
 
 module.exports = function(grunt) {
 
-    grunt.registerTask('build', function(theme) {
+    getVersion( 'theme_map/' , grunt);
+
+    grunt.initConfig({
+        archive: '../packages/theme_'+ grunt.option('theme') + '_'+(grunt.option('theme_version') || '1.0.0')+'.zip',
+        aux_theme: grunt.option('theme'),
+        shell: {
+            compress: {
+                command : 'cd tmp/; zip -r <%- archive %> <%- aux_theme %>',
+                options: {
+                    stdout: true
+                }
+            }
+        }
+    });
+
+    grunt.registerTask('copy', function() {
         var theme = grunt.option('theme');
         if(theme!=undefined) {
             var themes = new Array('brasil', 'india', 'italia', 'spain', 'usa');
@@ -28,23 +43,6 @@ module.exports = function(grunt) {
                 grunt.file.recurse('data/'+theme, function(abspath, rootdir, subdir, filename) {
                     osc_copy(abspath, rootdir, subdir, filename, grunt, theme);
                 });
-
-                // Compress package
-                grunt.log.writeln('Compress package');
-                grunt.initConfig({
-                    compress: {
-	                    main: {
-		                    options: {
-		                        archive: 'packages/theme_'+theme+'_'+(grunt.option('theme_version') || '1.0.0')+'.zip'
-		                    },
-		                    files: [
-                                {expand: true, cwd: 'tmp/', src: [theme+'/**'], dest: '/'}
-                            ]
-	                    }
-                    }
-
-                });
-                grunt.task.run('compress');
             } else {
                 grunt.log.writeln('The theme "'+theme+'" is not a valid one');
             }
@@ -53,7 +51,10 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.loadNpmTasks('grunt-contrib-compress');
+
+
+    grunt.registerTask('build', ['copy', 'shell']);
+    grunt.loadNpmTasks('grunt-shell');
 
 };
 
@@ -72,4 +73,12 @@ function osc_copy(abspath, rootdir, subdir, filename, grunt, theme) {
     } else {
         grunt.file.copy(abspath, 'tmp/'+theme+'/'+(subdir!=undefined?(subdir+'/'):'/')+filename);
     };
+}
+
+function getVersion(abspath, grunt) {
+    var content = grunt.file.read(abspath + '/index.php');
+    var version = content.match(/version\s*:\s*([0-9\.]+)/i);
+    if(version!=null) {
+        grunt.option('theme_version', version[1]);
+    }
 }
