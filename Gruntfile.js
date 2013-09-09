@@ -67,7 +67,7 @@ function osc_copy(abspath, rootdir, subdir, filename, grunt, theme) {
                 grunt.option('theme_version', version[1]);
             }
         }
-        content = content.replace('theme_map', theme);
+        content = content.replace(/theme_map/g, theme);
         grunt.file.write('tmp/'+theme+'/'+(subdir!=undefined?(subdir+'/'):'/')+filename, content);
     } else {
         grunt.file.copy(abspath, 'tmp/'+theme+'/'+(subdir!=undefined?(subdir+'/'):'/')+filename);
