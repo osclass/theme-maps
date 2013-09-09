@@ -2,11 +2,6 @@
 <h2 class="render-title <?php echo (osc_get_preference('footer_link', 'theme_map_theme') ? '' : 'separate-top'); ?>"><?php _e('Map Options', 'theme_map'); ?></h2>
 <div class="flashmessage flashmessage-warning flashmessage-inline"><p><strong><?php _e('How to assign a region to your map?','theme_map'); ?></strong><br><?php _e('First, click in the map to select the area you want to set. Then, a dialog will appear and you only need to select the region you want to assign. Finally, once you have selected the region, click the save button.','theme_map'); ?></p></div>
 <div id="main-map" style="float:left; margin:15px 0;position:relative">
-    <div style="position:relative; background-image:url(<?php echo osc_current_web_theme_url('images/map.png'); ?>); width:537px; height:533px;">
-        <canvas id="map-status"  style="position:absolute;left:2px; top:0px; width:537px; height:533px;" width="537" height="533"></canvas>
-        <canvas id="map-hover"  style="position:absolute;left:2px; top:0px; width:537px; height:533px;" width="537" height="533"></canvas>
-        <img src="<?php echo osc_current_web_theme_url('images/map.png'); ?>" alt="theme_map" usemap="#Map" border="0" style="position:absolute;left:0; top:2px; width:537px; height:533px; opacity:0" width="537" height="533"/>
-    </div>
     <?php osc_current_web_theme_path('map.php') ; ?>
 </div>
 <div style="display:none">

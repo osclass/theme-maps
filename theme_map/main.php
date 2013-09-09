@@ -54,13 +54,7 @@
         <div class="content home">
             <div id="main">
                 <!-- map -->
-
                 <div id="main-map" style="float:left; margin-bottom:15px; margin-top:15px" >
-                    <div style="position:relative; background-image:url(<?php echo osc_current_web_theme_url('images/map.png'); ?>); width:537px; height:533px;">
-                        <canvas id="map-status"  style="position:absolute;left:2px; top:0px; width:537px; height:533px;" width="537" height="533"></canvas>
-                        <canvas id="map-hover"  style="position:absolute;left:2px; top:0px; width:537px; height:533px;" width="537" height="533"></canvas>
-                        <img src="<?php echo osc_current_web_theme_url('images/map.png'); ?>" alt="theme_map" usemap="#Map" border="0" style="position:absolute;left:0; top:2px; width:537px; height:533px; opacity:0" width="537" height="533"/>
-                    </div>
                     <?php osc_current_web_theme_path('map.php') ; ?>
                 </div>
                 <!-- /map -->
@@ -139,7 +133,7 @@
                 var $_hasClass = $(this).attr('class'); //catching
                 var $_index = $('area:not([class^="group"])').index($(this));
                 var colorStatus = true;
-                
+
                 $(this).click(function(){
                     var key = $_index;
                     if($_hasClass != ''){
