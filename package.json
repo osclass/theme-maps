@@ -3,6 +3,8 @@
   "version": "3.2.0",
   "devDependencies": {
     "grunt": "~0.4.1",
+    "grunt-text-replace": "~0.3.7",
+    "grunt-contrib-copy": "~0.4.1",
     "grunt-shell": "0.3.1"
   }
 }

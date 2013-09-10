@@ -13,47 +13,98 @@ module.exports = function(grunt) {
     getVersion( 'theme_map/' , grunt);
 
     grunt.initConfig({
-        archive: '../packages/theme_'+ grunt.option('theme') + '_'+(grunt.option('theme_version') || '1.0.0')+'.zip',
-        aux_theme: grunt.option('theme'),
+        theme: grunt.file.readJSON('themes.json'),
         shell: {
-            compress: {
-                command : 'cd tmp/; zip -r <%- archive %> <%- aux_theme %>',
-                options: {
-                    stdout: true
+            compress: {},
+            xgettext: {}
+        },
+        replace: {
+
+        }
+    });
+
+//    grunt.registerTask('copy_'+theme.slug, function() {
+//        grunt.log.writeln('Generating theme for <<'+theme.slug+'>>');
+//
+//        // Copy theme files
+//        grunt.log.writeln('Copy theme files');
+//        grunt.file.recurse('theme_map/', function(abspath, rootdir, subdir, filename) {
+//            osc_copy(abspath, rootdir, subdir, filename, grunt, theme.slug);
+//        });
+//
+//        // Copy theme specific files
+//        grunt.log.writeln('Copy theme specific files');
+//        grunt.file.recurse('data/'+theme.slug, function(abspath, rootdir, subdir, filename) {
+//            osc_copy(abspath, rootdir, subdir, filename, grunt, theme.slug);
+//        });
+//    });
+
+
+
+//    grunt.registerTask('build_spain', ['copy', 'shell:gettext', 'shell:compress']);
+
+
+    var themeObj = grunt.config.get('theme');
+    for ( var key in themeObj ) {
+        var theme = themeObj[key];
+
+        grunt.config( 'copy.theme_'+ theme.slug , {
+            files: [
+                {
+                    expand: true,
+                    cwd: 'theme_map/',
+                    src: '**',
+                    dest: 'tmp/'+ theme.slug +'/'  // no se añade
                 }
+            ]
+        });
+
+        // zip destination
+        var archive = '../packages/theme_'+ theme.slug + '_'+(grunt.option('theme_version') || '1.0.0')+'.zip';
+        // shell gettext + compress
+        grunt.config( 'shell.compress_'+ theme.slug , {
+            command : 'cd tmp/; zip -r ' + archive + ' ' + theme.slug + '; rm -rf ' + theme.slug ,
+            options: {
+                stdout: true
             }
-        }
-    });
+        });
+        var varaux = theme.slug;
+        varaux = varaux.toUpperCase() + '_THEME_VERSION';
 
-    grunt.registerTask('copy', function() {
-        var theme = grunt.option('theme');
-        if(theme!=undefined) {
-            var themes = new Array('brasil', 'india', 'italia', 'spain', 'usa');
-            if(themes.indexOf(theme)!==-1) {
-                grunt.log.writeln('Generating theme for <<'+theme+'>>');
+        // replace theme strings
+        grunt.config( 'replace.theme_name_'+ theme.slug , {
+            src: ['tmp/'+theme.slug+'/*.php'],
+            overwrite: true,                 // overwrite matched source files
+            replacements: [{
+                from: 'theme_map',
+                to: theme.slug
+            },{
+                from: 'theme_country_title',
+                to: theme.slug
+            },{
+                from: '_theme_version',
+                to: varaux
+            }]
+        });
 
-                // Copy theme files
-                grunt.log.writeln('Copy theme files');
-                grunt.file.recurse('theme_map/', function(abspath, rootdir, subdir, filename) {
-                    osc_copy(abspath, rootdir, subdir, filename, grunt, theme);
-                });
-
-                // Copy theme specific files
-                grunt.log.writeln('Copy theme specific files');
-                grunt.file.recurse('data/'+theme, function(abspath, rootdir, subdir, filename) {
-                    osc_copy(abspath, rootdir, subdir, filename, grunt, theme);
-                });
-            } else {
-                grunt.log.writeln('The theme "'+theme+'" is not a valid one');
+        // generate po files & mo files
+        grunt.config( 'shell.gettext_' + theme.slug, {
+            command : 'xgettext --from-code=UTF-8 -k_n -k_e -k__ --package-name="<% theme.slug %> - theme map" --msgid-bugs-address="info@osclass.org" --package-version="'+grunt.option('theme_version')+'" -o default.po $(find tmp/<% theme.slug %>/. -name "*.php") && msginit --no-translator -l en_US.UTF-8 -o theme.po -i default.po ; msgfmt -o theme.mo theme.po;/\n\
+                       cp -f theme.po theme.mo tmp/<% theme.slug %>/languages/en_US/; rm -f theme.po default.po theme.mo',
+            options: {
+                stdout: true
             }
-        } else {
-            grunt.log.writeln('No theme set, use "grunt build -theme=name_of_the_theme"');
-        }
-    });
+        });
 
+        grunt.registerTask('build:'+theme.slug , ['copy:theme_'+theme.slug, 'replace:theme_name_'+theme.slug, 'shell:gettext_'+theme.slug, 'shell:compress_'+theme.slug]);
+    }
 
-    grunt.registerTask('build', ['copy', 'shell']);
+    grunt.registerTask('build', ['build:spain', 'build:italia', 'build:brasil', 'build:india', 'build:usa']);
+
     grunt.loadNpmTasks('grunt-shell');
+    grunt.loadNpmTasks('grunt-gettext');
+    grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-text-replace');
 
 };
 

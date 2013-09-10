@@ -19,7 +19,7 @@
      * License along with this program.  If not, see <http://www.gnu.org/licenses/>.
      */
 
-    define('BRASIL_THEME_VERSION', '1.0.2');
+    define('_theme_version', '1.0.2');
 
     if( !OC_ADMIN ) {
         if( !function_exists('add_close_button_action') ) {
