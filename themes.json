@@ -1,17 +1,22 @@
 {
     "spain": {
-        "slug": "spain"
+        "slug": "spain",
+        "n_regions": "47"
     },
     "italia": {
-        "slug": "italia"
+        "slug": "italia",
+        "n_regions": "28"
     },
     "usa": {
-        "slug": "usa"
+        "slug": "usa",
+        "n_regions": "49"
     },
     "brasil": {
-        "slug": "brasil"
+        "slug": "brasil",
+        "n_regions": "27"
     },
     "india": {
-        "slug": "india"
+        "slug": "india",
+        "n_regions": "31"
     }
 }
