@@ -54,7 +54,13 @@ module.exports = function(grunt) {
                     expand: true,
                     cwd: 'theme_map/',
                     src: '**',
-                    dest: 'tmp/'+ theme.slug +'/'  // no se añade
+                    dest: 'tmp/'+ theme.slug +'/'
+                },
+                {
+                    expand: true,
+                    cwd: 'data/'+theme.slug,
+                    src: '**',
+                    dest: 'tmp/'+theme.slug+'/'
                 }
             ]
         });
@@ -73,9 +79,12 @@ module.exports = function(grunt) {
 
         // replace theme strings
         grunt.config( 'replace.theme_name_'+ theme.slug , {
-            src: ['tmp/'+theme.slug+'/*.php'],
+            src: ['tmp/'+theme.slug+'/*.php', 'tmp/'+theme.slug+'/admin/*.php'],
             overwrite: true,                 // overwrite matched source files
             replacements: [{
+                from: '_theme_maps_n_regions',
+                to: theme.n_regions
+            },{
                 from: 'theme_map',
                 to: theme.slug
             },{
