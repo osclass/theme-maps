@@ -1,5 +1,5 @@
 <script type="text/javascript" src="<?php echo osc_current_web_theme_js_url('jquery.maphilight.min.js') ; ?>"></script>
-<h2 class="render-title <?php echo (osc_get_preference('footer_link', 'theme_map_theme') ? '' : 'separate-top'); ?>"><?php _e('Map Options', 'theme_map'); ?></h2>
+<h2 class="render-title <?php echo (osc_get_preference('footer_link', 'theme_map') ? '' : 'separate-top'); ?>"><?php _e('Map Options', 'theme_map'); ?></h2>
 <div class="flashmessage flashmessage-warning flashmessage-inline"><p><strong><?php _e('How to assign a region to your map?','theme_map'); ?></strong><br><?php _e('First, click in the map to select the area you want to set. Then, a dialog will appear and you only need to select the region you want to assign. Finally, once you have selected the region, click the save button.','theme_map'); ?></p></div>
 <div id="main-map" style="float:left; margin:15px 0;position:relative">
     <?php osc_current_web_theme_path('map.php') ; ?>
@@ -19,8 +19,8 @@ function countrySelect($id = null,$selected = null){
     $echo .= '</select><input type="hidden" name="target-id" value="'.$id.'"/>';
     return $echo;
 }
-$regions = json_decode(osc_get_preference('region_maps','theme_map_theme'),true);
-for($i=0;$i<27;$i++){
+$regions = json_decode(osc_get_preference('region_maps','theme_map'),true);
+for($i=0;$i<_theme_maps_n_regions;$i++){
     ?>
     <form id="region-<?php echo $i; ?>" class="region-dialog has-form-actions">
         <div class="form-horizontal">
@@ -94,7 +94,8 @@ $(function() {
 	            colorStatus = false;
 	        }
 	    }
-		//colors
+
+            //colors
 	    color = 'rgba(55,200,211,1)';
 	    lineColor = 'rgba(0,190,214,1)';
 	    if(!colorStatus){

@@ -1,9 +1,9 @@
 <?php
     /*
-     *      OSCLass – software for creating and publishing online classified
+     *      Osclass – software for creating and publishing online classified
      *                           advertising platforms
      *
-     *                        Copyright (C) 2010 OSCLASS
+     *                        Copyright (C) 2012 OSCLASS
      *
      *       This program is free software: you can redistribute it and/or
      *     modify it under the terms of the GNU Affero General Public License
@@ -19,10 +19,10 @@
      * License along with this program.  If not, see <http://www.gnu.org/licenses/>.
      */
 
-     $sQuery = osc_get_preference('keyword_placeholder', 'theme_map_theme');
+     $sQuery = osc_get_preference('keyword_placeholder', 'theme_map');
 ?>
 <script type="text/javascript">
-    var sQuery = '<?php echo osc_esc_js( $sQuery ); ?>' ;
+    var sQuery = '<?php echo osc_esc_js( $sQuery ); ?>';
 
     $(document).ready(function(){
         if($('input[name=sPattern]').val() == sQuery) {
@@ -46,14 +46,14 @@
     });
 </script>
 
-<form action="<?php echo osc_base_url(true) ; ?>" method="get" class="search" onsubmit="javascript:return doSearch();">
+<form action="<?php echo osc_base_url(true); ?>" method="get" class="search" onsubmit="javascript:return doSearch();">
     <input type="hidden" name="page" value="search" />
     <fieldset class="main">
         <input type="text" name="sPattern"  id="query" value="<?php echo osc_esc_html( ( osc_search_pattern() != '' ) ? osc_search_pattern() : $sQuery ); ?>" />
         <?php  if ( osc_count_categories() ) { ?>
-            <?php osc_categories_select('sCategory', null, __('Select a category', 'theme_map')) ; ?>
+            <?php osc_categories_select('sCategory', null, __('Select a category', 'theme_map')); ?>
         <?php  } ?>
-    	<button type="submit"><?php _e('Search', 'theme_map') ; ?></button>
+    	<button type="submit"><?php _e('Search', 'theme_map'); ?></button>
     </fieldset>
     <div id="search-example"></div>
 </form>

@@ -1,9 +1,9 @@
 <?php
     /*
-     *      OSCLass – software for creating and publishing online classified
+     *      Osclass – software for creating and publishing online classified
      *                           advertising platforms
      *
-     *                        Copyright (C) 2010 OSCLASS
+     *                        Copyright (C) 2012 OSCLASS
      *
      *       This program is free software: you can redistribute it and/or
      *     modify it under the terms of the GNU Affero General Public License
@@ -22,21 +22,21 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="<?php echo str_replace('_', '-', osc_current_user_locale()); ?>">
     <head>
-        <?php osc_current_web_theme_path('head.php') ; ?>
+        <?php osc_current_web_theme_path('head.php'); ?>
         <meta name="robots" content="noindex, nofollow" />
         <meta name="googlebot" content="noindex, nofollow" />
     </head>
     <body>
-        <?php osc_current_web_theme_path('header.php') ; ?>
+        <?php osc_current_web_theme_path('header.php'); ?>
         <div class="content user_account">
             <h1>
-                <strong><?php _e('User account manager', 'theme_map') ; ?></strong>
+                <strong><?php _e('User account manager', 'theme_map'); ?></strong>
             </h1>
             <div id="sidebar">
-                <?php echo osc_private_user_menu() ; ?>
+                <?php echo osc_private_user_menu(); ?>
             </div>
             <div id="main">
-                <h2><?php _e('Your listings', 'theme_map'); ?> <a href="<?php echo osc_item_post_url() ; ?>">+ <?php _e('Post a new listing', 'theme_map'); ?></a></h2>
+                <h2><?php _e('Your listings', 'theme_map'); ?> <a href="<?php echo osc_item_post_url(); ?>">+ <?php _e('Post a new listing', 'theme_map'); ?></a></h2>
                 <?php if(osc_count_items() == 0) { ?>
                     <h3><?php _e("You don't have any listings yet", 'theme_map'); ?></h3>
                 <?php } else { ?>
@@ -44,10 +44,13 @@
                             <div class="item" >
                                     <h3>
                                         <a href="<?php echo osc_item_url(); ?>"><?php echo osc_item_title(); ?></a>
+                                        <?php if(osc_item_is_active()) { echo '<span class="user-listing-active">'.__('Active', 'theme_map').'</span>'; } else { echo '<span class="user-listing-inactive">'.__('Inactive', 'theme_map').'</span>'; }; ?>
+                                        <?php if(osc_item_is_premium()) { echo '<span class="user-listing-premium">'.__('Premium', 'theme_map').'</span>'; }; ?>
+                                        <?php if(osc_item_is_spam()) { echo '<span class="user-listing-spam">'.__('Spam', 'theme_map').'</span>'; }; ?>
                                     </h3>
                                     <p>
-                                    <?php _e('Publication date', 'theme_map') ; ?>: <?php echo osc_format_date(osc_item_pub_date()) ; ?><br />
-                                    <?php if( osc_price_enabled_at_items() ) { _e('Price', 'theme_map') ; ?>: <?php echo osc_format_price(osc_item_price()); } ?>
+                                    <?php _e('Publication date', 'theme_map'); ?>: <?php echo osc_format_date(osc_item_pub_date()); ?><br />
+                                    <?php if( osc_price_enabled_at_items() && osc_item_category_price_enabled() ) { _e('Price', 'theme_map'); ?>: <?php echo osc_format_price(osc_item_price()); } ?>
                                     </p>
                                     <p class="options">
                                         <strong><a href="<?php echo osc_item_edit_url(); ?>"><?php _e('Edit', 'theme_map'); ?></a></strong>
@@ -63,7 +66,7 @@
                     <?php } ?>
                     <br />
                     <div class="paginate" >
-                    <?php for($i = 0 ; $i < osc_list_total_pages() ; $i++) {
+                    <?php for($i = 0; $i < osc_list_total_pages(); $i++) {
                         if($i == osc_list_page()) {
                             printf('<a class="searchPaginationSelected" href="%s">%d</a>', osc_user_list_items_url($i), ($i + 1));
                         } else {
@@ -74,6 +77,6 @@
                 <?php } ?>
             </div>
         </div>
-        <?php osc_current_web_theme_path('footer.php') ; ?>
+        <?php osc_current_web_theme_path('footer.php'); ?>
     </body>
 </html>

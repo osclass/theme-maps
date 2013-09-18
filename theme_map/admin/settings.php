@@ -1,4 +1,4 @@
-<?php if( !osc_get_preference('footer_link', 'theme_map_theme') ) { ?>
+<?php if( !osc_get_preference('footer_link', 'theme_map') ) { ?>
 <form name="_xclick" action="https://www.paypal.com/in/cgi-bin/webscr" method="post">
     <input type="hidden" name="cmd" value="_donations">
     <input type="hidden" name="rm" value="2">
@@ -19,19 +19,19 @@
     </div>
 </form>
 <?php } ?>
-<h2 class="render-title <?php echo (osc_get_preference('footer_link', 'theme_map_theme') ? '' : 'separate-top'); ?>"><?php _e('Theme settings', 'theme_map'); ?></h2>
+<h2 class="render-title <?php echo (osc_get_preference('footer_link', 'theme_map') ? '' : 'separate-top'); ?>"><?php _e('Theme settings', 'theme_map'); ?></h2>
 <form action="<?php echo osc_admin_render_theme_url('oc-content/themes/theme_map/admin/settings.php'); ?>" method="post">
     <input type="hidden" name="action_specific" value="settings" />
     <fieldset>
         <div class="form-horizontal">
             <div class="form-row">
                 <div class="form-label"><?php _e('Search placeholder', 'theme_map'); ?></div>
-                <div class="form-controls"><input type="text" class="xlarge" name="keyword_placeholder" value="<?php echo osc_esc_html( osc_get_preference('keyword_placeholder', 'theme_map_theme') ); ?>"></div>
+                <div class="form-controls"><input type="text" class="xlarge" name="keyword_placeholder" value="<?php echo osc_esc_html( osc_get_preference('keyword_placeholder', 'theme_map') ); ?>"></div>
             </div>
             <div class="form-row">
                 <div class="form-label"><?php _e('Footer link', 'theme_map'); ?></div>
                 <div class="form-controls">
-                    <div class="form-label-checkbox"><input type="checkbox" name="footer_link" value="1" <?php echo (osc_get_preference('footer_link', 'theme_map_theme') ? 'checked' : ''); ?> > <?php _e("I want to help OSClass by linking to <a href=\"http://osclass.org/\" target=\"_blank\">osclass.org</a> from my site with the following text:", 'theme_map'); ?></div>
+                    <div class="form-label-checkbox"><input type="checkbox" name="footer_link" value="1" <?php echo (osc_get_preference('footer_link', 'theme_map') ? 'checked' : ''); ?> > <?php _e("I want to help OSClass by linking to <a href=\"http://osclass.org/\" target=\"_blank\">osclass.org</a> from my site with the following text:", 'theme_map'); ?></div>
                     <span class="help-box"><?php _e('This website is proudly using the <a title="OSClass web" href="http://osclass.org/">classifieds scripts</a> software <strong>OSClass</strong>', 'theme_map'); ?></span>
                 </div>
             </div>

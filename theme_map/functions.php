@@ -1,9 +1,9 @@
 <?php
     /*
-     *      OSCLass – software for creating and publishing online classified
+     *      Osclass – software for creating and publishing online classified
      *                           advertising platforms
      *
-     *                        Copyright (C) 2010 OSCLASS
+     *                        Copyright (C) 2012 OSCLASS
      *
      *       This program is free software: you can redistribute it and/or
      *     modify it under the terms of the GNU Affero General Public License
@@ -30,22 +30,24 @@
                     echo '});';
                 echo '</script>';
             }
-            osc_add_hook('footer', 'add_close_button_action') ;
+            osc_add_hook('footer', 'add_close_button_action');
         }
     }
+
     function theme_theme_map_admin_regions_message(){
-        $regions = json_decode(osc_get_preference('region_maps','theme_map_theme'),true);
+        $regions = json_decode(osc_get_preference('region_maps','theme_map'),true);
         if(count($regions) < 27){
             echo '</div><div class="flashmessage flashmessage-error" style="display:block">'.sprintf(__('Wait! There are unassigned map areas in the map. <a href="%s">Click here</a> to assign regions to the map.','theme_map'),osc_admin_render_theme_url('oc-content/themes/theme_map/admin/map_settings.php')).'<a class="btn ico btn-mini ico-close">x</a>';
         }
     }
     osc_add_hook('admin_page_header', 'theme_theme_map_admin_regions_message',10) ;
+
     function theme_theme_map_regions_map_admin() {
-        $regions = json_decode(osc_get_preference('region_maps','theme_map_theme'),true);
+        $regions = json_decode(osc_get_preference('region_maps','theme_map'),true);
         switch( Params::getParam('action_specific') ) {
             case('edit_region_map'):
                 $regions[Params::getParam('target-id')] = Params::getParam('region');
-                osc_set_preference('region_maps', json_encode($regions), 'theme_map_theme');
+                osc_set_preference('region_maps', json_encode($regions), 'theme_map');
                 osc_add_flash_ok_message(__('Region saved correctly', 'theme_map'), 'admin');
                 header('Location: ' . osc_admin_render_theme_url('oc-content/themes/theme_map/admin/map_settings.php')); exit;
             break;
@@ -69,7 +71,7 @@
     function theme_theme_map_actions_admin() {
         if( Params::getParam('file') == 'oc-content/themes/theme_map/admin/settings.php' ) {
             if( Params::getParam('donation') == 'successful' ) {
-                osc_set_preference('donation', '1', 'theme_map_theme');
+                osc_set_preference('donation', '1', 'theme_map');
                 osc_reset_preferences();
             }
         }
@@ -77,8 +79,8 @@
         switch( Params::getParam('action_specific') ) {
             case('settings'):
                 $footerLink = Params::getParam('footer_link');
-                osc_set_preference('keyword_placeholder', Params::getParam('keyword_placeholder'), 'theme_map_theme');
-                osc_set_preference('footer_link', ($footerLink ? '1' : '0'), 'theme_map_theme');
+                osc_set_preference('keyword_placeholder', Params::getParam('keyword_placeholder'), 'theme_map');
+                osc_set_preference('footer_link', ($footerLink ? '1' : '0'), 'theme_map');
 
                 osc_add_flash_ok_message(__('Theme settings updated correctly', 'theme_map'), 'admin');
                 header('Location: ' . osc_admin_render_theme_url('oc-content/themes/theme_map/admin/settings.php')); exit;
@@ -139,22 +141,21 @@
     // install update options
     if( !function_exists('theme_map_theme_install') ) {
         function theme_map_theme_install() {
-            osc_set_preference('keyword_placeholder', __('ie. PHP Programmer', 'theme_map'), 'theme_map_theme');
-            osc_set_preference('version', BRASIL_THEME_VERSION, 'theme_map_theme');
-            osc_set_preference('footer_link', true, 'theme_map_theme');
-            osc_set_preference('donation', '0', 'theme_map_theme');
+            osc_set_preference('keyword_placeholder', __('ie. PHP Programmer', 'theme_map'), 'theme_map');
+            osc_set_preference('version', _theme_version, 'theme_map');
+            osc_set_preference('footer_link', true, 'theme_map');
+            osc_set_preference('donation', '0', 'theme_map');
         }
     }
 
     if(!function_exists('check_install_theme_map_theme')) {
         function check_install_theme_map_theme() {
-            $current_version = osc_get_preference('version', 'theme_map_theme');
-            //check if current version is installed or need an update<
+            $current_version = osc_get_preference('version', 'theme_map');
+            //check if current version is installed or need an update
             if( !$current_version ) {
                 theme_map_theme_install();
             }
         }
     }
     check_install_theme_map_theme();
-
 ?>
