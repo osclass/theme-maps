@@ -54,11 +54,10 @@ module.exports = function(grunt) {
         grunt.config( 'shell.compress_'+ theme.slug , {
             command : 'cd tmp/; zip -r ' + archive + ' ' + theme.slug + '; rm -rf ' + theme.slug ,
             options: {
-                stdout: true
+                stdout: false
             }
         });
 
-//        grunt.log.writeln(theme.slug);
 
         var varaux = theme.slug;
         varaux = varaux.toUpperCase() + '_THEME_VERSION';
@@ -86,14 +85,17 @@ module.exports = function(grunt) {
             }]
         });
 
+
         // generate po files & mo files
         grunt.config( 'shell.gettext_' + theme.slug, {
-            command : 'xgettext --from-code=UTF-8 -k_n -k_e -k__ --package-name="<% theme.slug %> - theme map" --msgid-bugs-address="info@osclass.org" --package-version="'+version+'" -o default.po $(find tmp/<% theme.slug %>/. -name "*.php") && msginit --no-translator -l en_US.UTF-8 -o theme.po -i default.po ; msgfmt -o theme.mo theme.po;/\n\
-                       cp -f theme.po theme.mo tmp/<% theme.slug %>/languages/en_US/; rm -f theme.po default.po theme.mo',
+
+            command : 'xgettext --from-code=UTF-8 -k_n:1,2 -k_e -k__ --package-name="'+theme.slug+' - theme map" --msgid-bugs-address="info@osclass.org" --package-version="'+version+'" -o temp.po $(find tmp/'+theme.slug+'/. -name "*.php") && sed \'s/CHARSET/UTF-8/\' temp.po > default.po ;msginit --no-translator --locale=en_US.UTF-8 -o theme.po -i default.po ;msgfmt -o theme.mo theme.po; cp -f theme.po theme.mo tmp/'+theme.slug+'/languages/en_US; rm -f theme.po theme.mo temp.po default.po',
             options: {
-                stdout: true
+                stdout: true,
+                stderr: true
             }
         });
+
         if(theme.slug=="modern") {
            // if modern theme, minor changes on building
            grunt.registerTask('build:'+theme.slug , ['copy:theme_'+theme.slug, 'replace:theme_name_'+theme.slug, 'shell:gettext_'+theme.slug, 'shell:compress_'+theme.slug]);
