@@ -10,8 +10,6 @@
 
 module.exports = function(grunt) {
 
-    getVersion( 'theme_map/' , grunt);
-
     grunt.initConfig({
         theme: grunt.file.readJSON('themes.json'),
         shell: {
@@ -23,30 +21,15 @@ module.exports = function(grunt) {
         }
     });
 
-//    grunt.registerTask('copy_'+theme.slug, function() {
-//        grunt.log.writeln('Generating theme for <<'+theme.slug+'>>');
-//
-//        // Copy theme files
-//        grunt.log.writeln('Copy theme files');
-//        grunt.file.recurse('theme_map/', function(abspath, rootdir, subdir, filename) {
-//            osc_copy(abspath, rootdir, subdir, filename, grunt, theme.slug);
-//        });
-//
-//        // Copy theme specific files
-//        grunt.log.writeln('Copy theme specific files');
-//        grunt.file.recurse('data/'+theme.slug, function(abspath, rootdir, subdir, filename) {
-//            osc_copy(abspath, rootdir, subdir, filename, grunt, theme.slug);
-//        });
-//    });
+    var themeObj   = grunt.config.get('theme');
+    var packageObj = grunt.file.readJSON('package.json');
 
-
-
-//    grunt.registerTask('build_spain', ['copy', 'shell:gettext', 'shell:compress']);
-
-
-    var themeObj = grunt.config.get('theme');
     for ( var key in themeObj ) {
         var theme = themeObj[key];
+        var version = packageObj.version_modern;
+        if(theme.slug!="modern") {
+            version = packageObj.version_modern_maps;
+        }
 
         grunt.config( 'copy.theme_'+ theme.slug , {
             files: [
@@ -66,7 +49,7 @@ module.exports = function(grunt) {
         });
 
         // zip destination
-        var archive = '../packages/theme_'+ theme.slug + '_'+(grunt.option('theme_version') || '1.0.0')+'.zip';
+        var archive = '../packages/theme_'+ theme.slug + '_'+(version || '1.0.0')+'.zip';
         // shell gettext + compress
         grunt.config( 'shell.compress_'+ theme.slug , {
             command : 'cd tmp/; zip -r ' + archive + ' ' + theme.slug + '; rm -rf ' + theme.slug ,
@@ -74,8 +57,12 @@ module.exports = function(grunt) {
                 stdout: true
             }
         });
+
+//        grunt.log.writeln(theme.slug);
+
         var varaux = theme.slug;
         varaux = varaux.toUpperCase() + '_THEME_VERSION';
+
 
         // replace theme strings
         grunt.config( 'replace.theme_name_'+ theme.slug , {
@@ -91,24 +78,32 @@ module.exports = function(grunt) {
                 from: 'theme_country_title',
                 to: theme.slug
             },{
-                from: '_theme_version',
+                from: '_theme_version_const',
                 to: varaux
+            },{
+                from: '_theme_version_number',
+                to: version
             }]
         });
 
         // generate po files & mo files
         grunt.config( 'shell.gettext_' + theme.slug, {
-            command : 'xgettext --from-code=UTF-8 -k_n -k_e -k__ --package-name="<% theme.slug %> - theme map" --msgid-bugs-address="info@osclass.org" --package-version="'+grunt.option('theme_version')+'" -o default.po $(find tmp/<% theme.slug %>/. -name "*.php") && msginit --no-translator -l en_US.UTF-8 -o theme.po -i default.po ; msgfmt -o theme.mo theme.po;/\n\
+            command : 'xgettext --from-code=UTF-8 -k_n -k_e -k__ --package-name="<% theme.slug %> - theme map" --msgid-bugs-address="info@osclass.org" --package-version="'+version+'" -o default.po $(find tmp/<% theme.slug %>/. -name "*.php") && msginit --no-translator -l en_US.UTF-8 -o theme.po -i default.po ; msgfmt -o theme.mo theme.po;/\n\
                        cp -f theme.po theme.mo tmp/<% theme.slug %>/languages/en_US/; rm -f theme.po default.po theme.mo',
             options: {
                 stdout: true
             }
         });
-
-        grunt.registerTask('build:'+theme.slug , ['copy:theme_'+theme.slug, 'replace:theme_name_'+theme.slug, 'shell:gettext_'+theme.slug, 'shell:compress_'+theme.slug]);
+        if(theme.slug=="modern") {
+           // if modern theme, minor changes on building
+           grunt.registerTask('build:'+theme.slug , ['copy:theme_'+theme.slug, 'replace:theme_name_'+theme.slug, 'shell:gettext_'+theme.slug, 'shell:compress_'+theme.slug]);
+        } else {
+            grunt.registerTask('build:'+theme.slug , ['copy:theme_'+theme.slug, 'replace:theme_name_'+theme.slug, 'shell:gettext_'+theme.slug, 'shell:compress_'+theme.slug]);
+        }
     }
 
-    grunt.registerTask('build', ['build:spain', 'build:italia', 'build:brasil', 'build:india', 'build:usa']);
+
+    grunt.registerTask('build', ['build:modern', 'build:spain', 'build:italia', 'build:brasil', 'build:india', 'build:usa']);
 
     grunt.loadNpmTasks('grunt-shell');
     grunt.loadNpmTasks('grunt-gettext');
@@ -116,28 +111,3 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-text-replace');
 
 };
-
-function osc_copy(abspath, rootdir, subdir, filename, grunt, theme) {
-    if(filename.substr(-3,3)=='php') {
-        var content = grunt.file.read(abspath);
-        if(filename=='index.php') {
-            var version = content.match(/version\s*:\s*([0-9\.]+)/i);
-            if(version!=null) {
-                content = content.replace('theme_country_title', theme);
-                grunt.option('theme_version', version[1]);
-            }
-        }
-        content = content.replace(/theme_map/g, theme);
-        grunt.file.write('tmp/'+theme+'/'+(subdir!=undefined?(subdir+'/'):'/')+filename, content);
-    } else {
-        grunt.file.copy(abspath, 'tmp/'+theme+'/'+(subdir!=undefined?(subdir+'/'):'/')+filename);
-    };
-}
-
-function getVersion(abspath, grunt) {
-    var content = grunt.file.read(abspath + '/index.php');
-    var version = content.match(/version\s*:\s*([0-9\.]+)/i);
-    if(version!=null) {
-        grunt.option('theme_version', version[1]);
-    }
-}
