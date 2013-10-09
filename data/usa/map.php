@@ -1,7 +1,7 @@
                     <div style="position:relative; background-image:url(<?php echo osc_current_web_theme_url('images/map.png'); ?>); width:695px; height:445px;">
                         <canvas id="map-status"  style="position:absolute;left:2px; top:0px; width:695px; height:445px;" width="695" height="445"></canvas>
                         <canvas id="map-hover"  style="position:absolute;left:2px; top:0px; width:695px; height:445px;" width="695" height="445"></canvas>
-                        <img src="<?php echo osc_current_web_theme_url('images/map.png'); ?>" alt="usa" usemap="#Map" border="0" style="position:absolute;left:0; top:2px; width:707px; height:562px; opacity:0" width="707" height="562"/>
+                        <img src="<?php echo osc_current_web_theme_url('images/map.png'); ?>" alt="usa" usemap="#Map" border="0" style="position:absolute;left:0; top:2px; width:707px; height:445px; opacity:0" width="707" height="445"/>
                     </div>
                     <map name="Map" id="Map">
                         <area shape="poly" coords="36,79,36,84,36,86,36,91,40,94,43,93,44,91,44,88,43,86,43,80,46,72,44,71,42,71,40,70,40,65,41,64,38,62,55,46,66,35,65,31,64,29,61,22,59,21,59,19,60,19,58,13,56,13,54,9,51,8,49,8,46,8,44,8,43,5,41,4,40,8,38,11,39,14,35,16,33,13,36,11,35,11,30,6,29,9,27,11,27,14,28,17,32,19,28,22,25,20,24,20,23,19,23,17,20,17,16,16,13,19,12,19,11,23,12,26,11,28,9,28,8,30,11,32,10,35,14,38,11,38,8,39,2,37,-1,36,-1,34,-6,33,-8,30,-10,29,-10,31,0,39,8,43,17,45,18,45,17,43,28,44,30,45,28,45,26,44,22,46,24,47,22,46,21,47,25,49,27,51,29,50,30,49,33,52,33,58,36,61,36,63,38,65,39,74,38,76" href="#" />

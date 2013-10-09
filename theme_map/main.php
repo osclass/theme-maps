@@ -29,9 +29,6 @@
         #main-map canvas{
             margin-top:2px;
         }
-        #sidebar .navigation{
-            height:545px;
-        }
         #map-tooltip{
             position:absolute;
             background:#f2f2f2;
