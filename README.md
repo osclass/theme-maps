@@ -28,24 +28,28 @@ List themes
 -----------
 
 - Modern theme (base theme)
+
 ![Preview of Modern theme][modern]
 
 - Spain theme
+
 ![Preview of Spain theme][spain]
 
 - Italia
+
 ![Preview of Italia theme][italia]
 
 - Usa
+
 ![Preview of Usa theme][usa]
 
 - Brasil
+
 ![Preview of Brasil theme][brasil]
 
 - India
+
 ![Preview of India theme][india]
-
-
 
 
 [modern]: http://market.osclass.org/oc-content/uploads/35.jpg
