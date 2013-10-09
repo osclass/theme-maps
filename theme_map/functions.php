@@ -19,7 +19,9 @@
      * License along with this program.  If not, see <http://www.gnu.org/licenses/>.
      */
 
-    define('_theme_version', '1.0.2');
+    define('_theme_version_const', '_theme_version_number');
+
+    osc_enqueue_script('php-date');
 
     if( !OC_ADMIN ) {
         if( !function_exists('add_close_button_action') ) {
@@ -34,40 +36,6 @@
         }
     }
 
-    function theme_theme_map_admin_regions_message(){
-        $regions = json_decode(osc_get_preference('region_maps','theme_map'),true);
-        if(count($regions) < 27){
-            echo '</div><div class="flashmessage flashmessage-error" style="display:block">'.sprintf(__('Wait! There are unassigned map areas in the map. <a href="%s">Click here</a> to assign regions to the map.','theme_map'),osc_admin_render_theme_url('oc-content/themes/theme_map/admin/map_settings.php')).'<a class="btn ico btn-mini ico-close">x</a>';
-        }
-    }
-    osc_add_hook('admin_page_header', 'theme_theme_map_admin_regions_message',10) ;
-
-    function theme_theme_map_regions_map_admin() {
-        $regions = json_decode(osc_get_preference('region_maps','theme_map'),true);
-        switch( Params::getParam('action_specific') ) {
-            case('edit_region_map'):
-                $regions[Params::getParam('target-id')] = Params::getParam('region');
-                osc_set_preference('region_maps', json_encode($regions), 'theme_map');
-                osc_add_flash_ok_message(__('Region saved correctly', 'theme_map'), 'admin');
-                header('Location: ' . osc_admin_render_theme_url('oc-content/themes/theme_map/admin/map_settings.php')); exit;
-            break;
-        }
-    }
-
-    function map_region_url($region_id) {
-        $regionData = Region::newInstance()->findByPrimaryKey($region_id);
-        if ( osc_rewrite_enabled() ) {
-            $url = osc_base_url();
-            if( osc_get_preference('seo_url_search_prefix') != '' ) {
-                $url .= osc_get_preference('seo_url_search_prefix') . '/';
-            }
-            $url .= osc_sanitizeString($regionData['s_name']) . '-r' . $regionData['pk_i_id'];
-            return $url;
-        } else {
-            return osc_search_url( array( 'sRegion' => $regionData['s_name']) );
-        }
-    }
-
     function theme_theme_map_actions_admin() {
         if( Params::getParam('file') == 'oc-content/themes/theme_map/admin/settings.php' ) {
             if( Params::getParam('donation') == 'successful' ) {
@@ -78,9 +46,11 @@
 
         switch( Params::getParam('action_specific') ) {
             case('settings'):
-                $footerLink = Params::getParam('footer_link');
+                $footerLink  = Params::getParam('footer_link');
+                $defaultLogo = Params::getParam('default_logo');
                 osc_set_preference('keyword_placeholder', Params::getParam('keyword_placeholder'), 'theme_map');
                 osc_set_preference('footer_link', ($footerLink ? '1' : '0'), 'theme_map');
+                osc_set_preference('default_logo', ($defaultLogo ? '1' : '0'), 'theme_map');
 
                 osc_add_flash_ok_message(__('Theme settings updated correctly', 'theme_map'), 'admin');
                 header('Location: ' . osc_admin_render_theme_url('oc-content/themes/theme_map/admin/settings.php')); exit;
@@ -109,29 +79,14 @@
             break;
         }
     }
-    osc_add_hook('init_admin', 'theme_theme_map_actions_admin');
-    osc_add_hook('init_admin', 'theme_theme_map_regions_map_admin');
-    if(function_exists('osc_admin_menu_appearance')){
-        osc_admin_menu_appearance(__('Header logo', 'theme_map'), osc_admin_render_theme_url('oc-content/themes/theme_map/admin/header.php'), 'header_theme_map');
-        osc_admin_menu_appearance(__('Theme settings', 'theme_map'), osc_admin_render_theme_url('oc-content/themes/theme_map/admin/settings.php'), 'settings_theme_map');
-        osc_admin_menu_appearance(__('Map settings', 'theme_map'), osc_admin_render_theme_url('oc-content/themes/theme_map/admin/map_settings.php'), 'map_settings_theme_map');
-    } else {
-        function theme_map_admin_menu() {
-            echo '<h3><a href="#">'. __('Brasil theme','theme_map') .'</a></h3>
-            <ul>
-                <li><a href="' . osc_admin_render_theme_url('oc-content/themes/theme_map/admin/header.php') . '">&raquo; '.__('Header logo', 'theme_map').'</a></li>
-                <li><a href="' . osc_admin_render_theme_url('oc-content/themes/theme_map/admin/settings.php') . '">&raquo; '.__('Theme settings', 'theme_map').'</a></li>
-                <li><a href="' . osc_admin_render_theme_url('oc-content/themes/theme_map/admin/map_settings.php') . '">&raquo; '.__('Map settings', 'theme_map').'</a></li>
 
-            </ul>';
-        }
-        osc_add_hook('admin_menu', 'theme_map_admin_menu');
-    }
     if( !function_exists('logo_header') ) {
         function logo_header() {
             $html = '<img border="0" alt="' . osc_page_title() . '" src="' . osc_current_web_theme_url('images/logo.jpg') . '" />';
             if( file_exists( WebThemes::newInstance()->getCurrentThemePath() . "images/logo.jpg" ) ) {
                 return $html;
+            } else if( osc_get_preference('default_logo', 'theme_map') && (file_exists( WebThemes::newInstance()->getCurrentThemePath() . "images/default-logo.jpg")) ) {
+                return '<img border="0" alt="' . osc_page_title() . '" src="' . osc_current_web_theme_url('images/default-logo.jpg') . '" />';
             } else {
                 return osc_page_title();
             }
@@ -142,9 +97,11 @@
     if( !function_exists('theme_map_theme_install') ) {
         function theme_map_theme_install() {
             osc_set_preference('keyword_placeholder', __('ie. PHP Programmer', 'theme_map'), 'theme_map');
-            osc_set_preference('version', _theme_version, 'theme_map');
+            osc_set_preference('version', '_theme_version_number', 'theme_map');
             osc_set_preference('footer_link', true, 'theme_map');
             osc_set_preference('donation', '0', 'theme_map');
+            osc_set_preference('default_logo', '1', 'theme_map');
+            osc_reset_preferences();
         }
     }
 
@@ -157,5 +114,8 @@
             }
         }
     }
+
+    require_once WebThemes::newInstance()->getCurrentThemePath() . 'inc.functions.php';
+
     check_install_theme_map_theme();
 ?>

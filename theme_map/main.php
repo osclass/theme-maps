@@ -18,20 +18,6 @@
      *      You should have received a copy of the GNU Affero General Public
      * License along with this program.  If not, see <http://www.gnu.org/licenses/>.
      */
-
-function drawSubcategory($category) {
-    if ( osc_count_subcategories2() > 0 ) {
-        osc_category_move_to_children();
-        ?>
-        <ul>
-            <?php while ( osc_has_categories() ) { ?>
-                <li><a class="category cat_<?php echo osc_category_id(); ?>" href="<?php echo osc_search_category_url(); ?>"><?php echo osc_category_name(); ?></a> <span>(<?php echo osc_category_total_items(); ?>)</span><?php drawSubcategory(osc_category()); ?></li>
-            <?php } ?>
-        </ul>
-    <?php
-        osc_category_move_to_parent();
-    }
-}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="<?php echo str_replace('_', '-', osc_current_user_locale()); ?>">
@@ -66,11 +52,7 @@ function drawSubcategory($category) {
         </div>
         <div class="content home">
             <div id="main">
-                <!-- map -->
-                <div id="main-map" style="float:left; margin-bottom:15px; margin-top:15px" >
-                    <?php osc_current_web_theme_path('map.php') ; ?>
-                </div>
-                <!-- /map -->
+                <?php osc_current_web_theme_path('inc.main.php') ; ?>
                <div class="latest_ads">
                     <h1><strong><?php _e('Latest Listings', 'theme_map'); ?></strong></h1>
                     <?php if( osc_count_latest_items() == 0) { ?>

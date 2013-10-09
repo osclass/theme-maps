@@ -32,6 +32,16 @@
         <?php ItemForm::location_javascript_new(); ?>
         <?php if(osc_images_enabled_at_items()) ItemForm::photos_javascript(); ?>
         <script type="text/javascript">
+
+            $(document).ready(function(){
+                $('body').on("created", '[name^="select_"]',function(evt) {
+                    $(this).uniform();
+                });
+                $('body').on("removed", '[name^="select_"]',function(evt) {
+                    $(this).parent().remove();
+                });
+            });
+
             function uniform_input_file(){
                 photos_div = $('div.photos');
                 $('div',photos_div).each(
@@ -105,7 +115,7 @@
                             <h2><?php _e('General Information', 'theme_map'); ?></h2>
                             <div class="row">
                                 <label><?php _e('Category', 'theme_map'); ?> *</label>
-                                <?php ItemForm::category_select(null, null, __('Select a category', 'theme_map')); ?>
+                                <?php ItemForm::category_multiple_selects(null, null, __('Select a category', 'theme_map')); ?>
                             </div>
                             <div class="row">
                                 <?php ItemForm::multilanguage_title_description(osc_get_locales()); ?>

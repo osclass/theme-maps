@@ -1,4 +1,8 @@
 {
+    "modern": {
+        "slug": "modern",
+        "n_regions": "0"
+    },
     "spain": {
         "slug": "spain",
         "n_regions": "47"
