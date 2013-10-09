@@ -22,7 +22,7 @@ function countrySelect($id = null,$selected = null){
 $regions = json_decode(osc_get_preference('region_maps','theme_map'),true);
 for($i=0;$i<_theme_maps_n_regions;$i++){
     ?>
-    <form id="region-<?php echo $i; ?>" class="region-dialog has-form-actions">
+    <form id="region-<?php echo $i; ?>" class="region-dialog has-form-actions" onsubmit="return validateForm('region-<?php echo $i; ?>')" >
         <div class="form-horizontal">
             <div class="form-row">
                 <div class="form-label"><?php _e('Select a region', 'theme_map'); ?></div>
@@ -43,7 +43,7 @@ for($i=0;$i<_theme_maps_n_regions;$i++){
 }
 for($i=1;$i<2;$i++){
     ?>
-    <form id="region-group-<?php echo $i; ?>" class="region-dialog has-form-actions">
+    <form id="region-group-<?php echo $i; ?>" class="region-dialog has-form-actions" onsubmit="return validateForm('region-group-<?php echo $i; ?>')" >
         <div class="form-horizontal">
             <div class="form-row">
                 <div class="form-label"><?php _e('Select a region', 'theme_map'); ?></div>
@@ -71,6 +71,11 @@ $('.region-dialog').dialog({
     width:500,
     title: '<?php echo osc_esc_js(__('Select a region', 'theme_map')); ?>'
 });
+
+function validateForm(form_id) {
+    return $('#'+form_id+' select').val()!="";
+}
+
 $(function() {
     var linksRegions = new Array();
 <?php
