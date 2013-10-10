@@ -28,6 +28,9 @@ for($i=0;$i<_theme_maps_n_regions;$i++){
                 <div class="form-label"><?php _e('Select a region', 'theme_map'); ?></div>
                 <div class="form-controls"><?php $selected = 'false'; if(isset($regions[$i])){ $selected = $regions[$i]; } echo countrySelect($i,$selected); ?></div>
             </div>
+            <div style="display:none" class="form-row error">
+                <div>*<?php _e('Select a region first', 'theme_map'); ?></div>
+            </div>
             <div class="form-actions">
                 <div class="wrapper">
                 <input type="submit" value="<?php _e('Save changes', 'theme_map'); ?>" class="btn btn-submit">
@@ -73,7 +76,11 @@ $('.region-dialog').dialog({
 });
 
 function validateForm(form_id) {
-    return $('#'+form_id+' select').val()!="";
+    var return_value = $('#'+form_id+' select').val()!="";
+    if(!return_value) {
+        $('#'+form_id+' div.error').css('display', 'block');
+    }
+    return return_value;
 }
 
 $(function() {
