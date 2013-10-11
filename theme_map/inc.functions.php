@@ -36,13 +36,23 @@ function theme_theme_map_regions_map_admin() {
 
 function map_region_url($region_id) {
     $regionData = Region::newInstance()->findByPrimaryKey($region_id);
-    if (osc_rewrite_enabled()) {
-        $url = osc_base_url();
-        if (osc_get_preference('seo_url_search_prefix') != '') {
-            $url .= osc_get_preference('seo_url_search_prefix') . '/';
+    if( function_exists('osc_subdomain_type') ) {
+        if(osc_subdomain_type()=='region' || osc_subdomain_type()=='category') {
+            return osc_update_search_url(array('sRegion' => $regionData['s_name']));
+        } else {
+            $url    = osc_base_url();
+            if(osc_subdomain_type()!='') {
+                $aParts = explode('.', $url);
+                unset($aParts[0]);
+                $url = implode('.', $aParts);
+            }
+
+            if (osc_get_preference('seo_url_search_prefix') != '') {
+                $url .= osc_get_preference('seo_url_search_prefix') . '/';
+            }
+            $url .= osc_sanitizeString($regionData['s_name']) . '-r' . $regionData['pk_i_id'];
+            return $url;
         }
-        $url .= osc_sanitizeString($regionData['s_name']) . '-r' . $regionData['pk_i_id'];
-        return $url;
     } else {
         return osc_search_url(array('sRegion' => $regionData['s_name']));
     }
@@ -50,7 +60,7 @@ function map_region_url($region_id) {
 
 function theme_theme_map_admin_regions_message() {
     $regions = json_decode(osc_get_preference('region_maps', 'theme_map'), true);
-    if (count($regions) < 27) {
+    if (count($regions) < _theme_maps_n_regions) {
         echo '</div><div class="flashmessage flashmessage-error" style="display:block">' . sprintf(__('Wait! There are unassigned map areas in the map. <a href="%s">Click here</a> to assign regions to the map.', 'theme_map'), osc_admin_render_theme_url('oc-content/themes/theme_map/admin/map_settings.php')) . '<a class="btn ico btn-mini ico-close">x</a>';
     }
 }
