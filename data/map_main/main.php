@@ -25,6 +25,22 @@
         <?php osc_current_web_theme_path('head.php'); ?>
         <meta name="robots" content="index, follow" />
         <meta name="googlebot" content="index, follow" />
+        <style>
+        #main-map canvas{
+            margin-top:2px;
+        }
+        #map-tooltip{
+            position:absolute;
+            background:#f2f2f2;
+            border:solid 2px #bababa;
+            margin-left:5px;
+            margin-top:0px;
+            padding:7px;
+            border-radius:5px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+        }
+        </style>
     </head>
     <body>
         <?php osc_current_web_theme_path('header.php'); ?>
@@ -87,5 +103,72 @@
                 </div>
             </div>
         </div>
+        <!-- map js -->
+        <?php osc_current_web_theme_path('footer.php') ; ?>
+        <script type="text/javascript">
+        $(function() {
+            var linksRegions = new Array();
+            var statsRegions = new Array();
+        <?php
+            $regions = json_decode(osc_get_preference('region_maps','theme_map'),true);
+            if($regions){
+                foreach($regions as $key => $value){
+                    $regionData  = Region::newInstance()->findByPrimaryKey($value);
+                    $regionStats = RegionStats::newInstance()->findByRegionId($value);
+                    echo "    linksRegions['$key'] = '".map_region_url($value)."';".PHP_EOL;
+                    echo "    statsRegions['$key'] = {name:'".osc_esc_js($regionData['s_name'])."', count:'".$regionStats['i_num_items']."'};".PHP_EOL;
+                }
+            }
+        ?>
+            //find all regions map has assigned a location
+            $('area').each(function(){
+                var $_hasClass  = $(this).attr('class'); //catching
+                var $_index     = $('area:not([class^="group"])').index($(this));
+                var colorStatus = true;
+
+                $(this).click(function(){
+                    var key = $_index;
+                    if(typeof $_hasClass != 'undefined' && $_hasClass != ''){
+                         key = $_hasClass;
+                    }
+                    if(typeof linksRegions[key] != 'undefined'){
+                        window.location.href = linksRegions[key];
+                    }
+                    return false;
+                }).hover(function(e){
+                    var key     = $_index;
+                    var canvas  = undefined;
+                    if(typeof $_hasClass != 'undefined' && $_hasClass != ''){
+                         key = $_hasClass;
+                    }
+                    if(typeof statsRegions[key] != 'undefined') {
+                        $('#map-tooltip').html(statsRegions[key].name + ': '+statsRegions[key].count + ' ads').css({
+                            top: e.pageY,
+                            left: e.pageX
+                        }).show();
+                        canvas = document.getElementById("map-hover");
+                        canvas.width = canvas.width;
+                        options = {
+                            lineColor:  '#de9200',
+                            fillColor:  '#ffa800'
+                        }
+                        if($(this).attr('class') != ''){
+                            $('.'+$(this).attr('class')).each(function(){
+                                drawCanvas('map-hover', $(this).attr('coords'), options);
+                            });
+                        } else {
+                            drawCanvas('map-hover', $(this).attr('coords'), options);
+                        }
+                    }
+                },function(){
+                    canvas       = document.getElementById("map-hover");
+                    canvas.width = canvas.width;
+                    $('#map-tooltip').hide();
+                });
+            });
+        });
+        </script>
+        <div id="map-tooltip"></div>
+        <!-- /map js -->
     </body>
 </html>

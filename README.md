@@ -52,6 +52,16 @@ List themes
 ![Preview of India theme][india]
 
 
+Notes
+-----
+
+- theme_map/main.php, homepage template used by modern theme.
+
+- data/map_main/main.php, homepage template used by *map* themes.
+  Include some css and js used by homepage map.
+
+
+
 [modern]: http://market.osclass.org/oc-content/uploads/35.jpg
 [spain]: http://market.osclass.org/oc-content/uploads/13.jpg
 [italia]: http://market.osclass.org/oc-content/uploads/20.jpg

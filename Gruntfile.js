@@ -21,6 +21,17 @@ module.exports = function(grunt) {
         var version = packageObj.version_modern;
         if(theme.slug!="modern") {
             version = packageObj.version_modern_maps;
+            // copy specific main.php for map themes
+            grunt.config( 'copy.main_theme_'+ theme.slug , {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'data/map_main/',
+                        src: '**',
+                        dest: 'tmp/'+ theme.slug +'/'
+                    }
+                ]
+            });
         }
 
         grunt.config( 'copy.theme_'+ theme.slug , {
@@ -92,7 +103,7 @@ module.exports = function(grunt) {
            // if modern theme, minor changes on building
            grunt.registerTask('build:'+theme.slug , ['copy:theme_'+theme.slug, 'replace:theme_name_'+theme.slug, 'shell:gettext_'+theme.slug, 'shell:compress_'+theme.slug]);
         } else {
-            grunt.registerTask('build:'+theme.slug , ['copy:theme_'+theme.slug, 'replace:theme_name_'+theme.slug, 'shell:gettext_'+theme.slug, 'shell:compress_'+theme.slug]);
+            grunt.registerTask('build:'+theme.slug , ['copy:theme_'+theme.slug, 'copy:main_theme_'+theme.slug, 'replace:theme_name_'+theme.slug, 'shell:gettext_'+theme.slug, 'shell:compress_'+theme.slug]);
         }
     }
 
