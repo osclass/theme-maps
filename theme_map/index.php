@@ -1,8 +1,8 @@
 <?php
 /*
-Theme Name: OSClass theme_country_title theme
+Theme Name: Osclass theme_country_title theme
 Theme URI: http://www.osclass.org/
-Description: This is the OSClass theme_country_title theme
+Description: This is the Osclass theme_country_title theme
 Version: _theme_version_number
 Author: OSClass team
 Author URI: http://www.osclass.org/
@@ -12,10 +12,10 @@ Theme update URI: theme_map
 
     function theme_map_theme_info() {
         return array(
-            'name'        => 'OSClass theme_country_title theme',
+            'name'        => 'Osclass theme_country_title theme',
             'version'     => '_theme_version_number',
-            'description' => 'This is the OSClass theme_country_title theme',
-            'author_name' => 'OSClass team',
+            'description' => 'This is the Osclass theme_country_title theme',
+            'author_name' => 'Osclass team',
             'author_url'  => 'http://osclass.org',
             'locations'   => array('header', 'footer')
         );
