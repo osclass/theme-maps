@@ -44,7 +44,7 @@ for($i=0;$i<_theme_maps_n_regions;$i++){
     </form>
 <?php
 }
-for($i=1;$i<2;$i++){
+for($i=1;$i<=_theme_maps_n_regions_group;$i++){
     ?>
     <form id="region-group-<?php echo $i; ?>" class="region-dialog has-form-actions" onsubmit="return validateForm('region-group-<?php echo $i; ?>')" >
         <div class="form-horizontal">
@@ -98,14 +98,14 @@ $(function() {
 		var $_index = $('area:not([class^="group"])').index($(this));   //catching
 		var colorStatus = true;
 		if($_hasClass != undefined){
-	        if(typeof linksRegions[$_hasClass] == 'undefined'){
-	            colorStatus = false;
-	        }
-	    } else {
-	    	if(typeof linksRegions[$_index] == 'undefined'){
-	            colorStatus = false;
-	        }
-	    }
+                    if(typeof linksRegions[$_hasClass] == 'undefined'){
+                        colorStatus = false;
+                    }
+                } else {
+                    if(typeof linksRegions[$_index] == 'undefined'){
+                        colorStatus = false;
+                    }
+                }
 
             //colors
 	    color = 'rgba(55,200,211,1)';
@@ -121,6 +121,7 @@ $(function() {
 	    drawCanvas('map-status', $(this).attr('coords'), options);
 	    //draw($(this).attr('coords'),colorStatus);
 	    $(this).click(function(){
+                console.log('region click ' + $_hasClass);
 	        if($_hasClass != undefined){
 	            var element = $('#region-'+$_hasClass);
 	        } else {

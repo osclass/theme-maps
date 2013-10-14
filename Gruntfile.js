@@ -71,6 +71,9 @@ module.exports = function(grunt) {
             src: ['tmp/'+theme.slug+'/*.php', 'tmp/'+theme.slug+'/admin/*.php'],
             overwrite: true,                 // overwrite matched source files
             replacements: [{
+                from: '_theme_maps_n_regions_group',
+                to: theme.n_regions_group
+            },{
                 from: '_theme_maps_n_regions',
                 to: theme.n_regions
             },{

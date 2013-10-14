@@ -1,26 +1,32 @@
 {
     "modern": {
         "slug": "modern",
-        "n_regions": "0"
+        "n_regions": "0",
+        "n_regions_group": "0"
     },
     "spain": {
         "slug": "spain",
-        "n_regions": "47"
+        "n_regions": "47",
+        "n_regions_group": "5"
     },
     "italia": {
         "slug": "italia",
-        "n_regions": "28"
+        "n_regions": "28",
+        "n_regions_group": "1"
     },
     "usa": {
         "slug": "usa",
-        "n_regions": "49"
+        "n_regions": "49",
+        "n_regions_group": "2"
     },
     "brasil": {
         "slug": "brasil",
-        "n_regions": "27"
+        "n_regions": "27",
+        "n_regions_group": "1"
     },
     "india": {
         "slug": "india",
-        "n_regions": "31"
+        "n_regions": "31",
+        "n_regions_group": "5"
     }
 }
