@@ -37,20 +37,39 @@ function theme_theme_map_regions_map_admin() {
 function map_region_url($region_id) {
     $regionData = Region::newInstance()->findByPrimaryKey($region_id);
     if( function_exists('osc_subdomain_type') ) {
-        if(osc_subdomain_type()=='region' || osc_subdomain_type()=='category') {
+        if(osc_subdomain_type()=='region' || osc_subdomain_type()=='category' || osc_subdomain_type()=='country') {
             return osc_update_search_url(array('sRegion' => $regionData['s_name']));
         } else {
-            $url    = osc_base_url();
+            // If osc_subdomain_type == 'city', redirect to base domain.
+            if(osc_rewrite_enabled()) {
+                $url    = osc_base_url();
+            } else {
+                $url    = osc_base_url(true);
+            }
+
+            // remove subdomain from url
             if(osc_subdomain_type()!='') {
                 $aParts = explode('.', $url);
                 unset($aParts[0]);
-                $url = implode('.', $aParts);
+                // http or https
+                $url = 'http://';
+                if( isset($_SERVER['HTTPS']) ) {
+                    if( strtolower($_SERVER['HTTPS']) == 'on' ){
+                        $url = 'https://';
+                    }
+                }
+                $url .= implode('.', $aParts);
             }
+            if(osc_rewrite_enabled()) {
+                if (osc_get_preference('seo_url_search_prefix') != '') {
+                    $url .= osc_get_preference('seo_url_search_prefix') . '/';
+                }
+                $url .= osc_sanitizeString($regionData['s_name']) . '-r' . $regionData['pk_i_id'];
 
-            if (osc_get_preference('seo_url_search_prefix') != '') {
-                $url .= osc_get_preference('seo_url_search_prefix') . '/';
+            } else {
+                $url .= '?page=search&sRegion='. $regionData['s_name']; // osc_update_search_url(array('sRegion' => $regionData['s_name']));
+
             }
-            $url .= osc_sanitizeString($regionData['s_name']) . '-r' . $regionData['pk_i_id'];
             return $url;
         }
     } else {
