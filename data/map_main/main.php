@@ -105,6 +105,7 @@
         </div>
         <!-- map js -->
         <?php osc_current_web_theme_path('footer.php') ; ?>
+        <script type="text/javascript" src="<?php echo osc_current_web_theme_js_url('jquery.maphilight.min.js') ; ?>"></script>
         <script type="text/javascript">
         $(function() {
             var linksRegions = new Array();
@@ -152,7 +153,7 @@
                             lineColor:  '#de9200',
                             fillColor:  '#ffa800'
                         }
-                        if($(this).attr('class') != ''){
+                        if($(this).attr('class') != '' && typeof $(this).attr('class') != 'undefined'){
                             $('.'+$(this).attr('class')).each(function(){
                                 drawCanvas('map-hover', $(this).attr('coords'), options);
                             });
