@@ -220,12 +220,15 @@
                         <?php } ?>
                         <ul id="error_list"></ul>
                         <?php ContactForm::js_validation(); ?>
-                        <form action="<?php echo osc_base_url(true); ?>" method="post" name="contact_form" id="contact_form">
+                        <form <?php if( osc_item_attachment() ) { ?>enctype="multipart/form-data"<?php } ?> action="<?php echo osc_base_url(true); ?>" method="post" name="contact_form" id="contact_form">
                             <?php osc_prepare_user_info(); ?>
                             <fieldset>
                                 <label for="yourName"><?php _e('Your name', 'theme_map'); ?>:</label> <?php ContactForm::your_name(); ?>
                                 <label for="yourEmail"><?php _e('Your e-mail address', 'theme_map'); ?>:</label> <?php ContactForm::your_email(); ?>
                                 <label for="phoneNumber"><?php _e('Phone number', 'theme_map'); ?> (<?php _e('optional', 'theme_map'); ?>):</label> <?php ContactForm::your_phone_number(); ?>
+                                <?php if( osc_item_attachment() ) { ?>
+                                <label for="contact-attachment"><?php _e('Attachments', 'twitter') ; ?></label><?php ContactForm::your_attachment() ; ?>
+                                <?php } ?>
                                 <?php osc_run_hook('item_contact_form', osc_item_id()); ?>
                                 <label for="message"><?php _e('Message', 'theme_map'); ?>:</label> <?php ContactForm::your_message(); ?>
                                 <input type="hidden" name="action" value="contact_post" />
