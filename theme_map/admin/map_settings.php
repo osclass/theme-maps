@@ -121,7 +121,6 @@ $(function() {
 	    drawCanvas('map-status', $(this).attr('coords'), options);
 	    //draw($(this).attr('coords'),colorStatus);
 	    $(this).click(function(){
-                console.log('region click ' + $_hasClass);
 	        if($_hasClass != undefined){
 	            var element = $('#region-'+$_hasClass);
 	        } else {
