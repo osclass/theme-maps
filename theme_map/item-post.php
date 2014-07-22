@@ -30,7 +30,11 @@
 
         <!-- only item-post.php -->
         <?php ItemForm::location_javascript_new(); ?>
-        <?php if(osc_images_enabled_at_items()) ItemForm::photos_javascript(); ?>
+        <?php
+        if(osc_images_enabled_at_items() && !theme_map_is_fineuploader()) {
+            ItemForm::photos_javascript();
+        }
+        ?>
         <script type="text/javascript">
 
             $(document).ready(function(){
@@ -128,6 +132,13 @@
                     <?php } ?>
                     <?php if( osc_images_enabled_at_items() ) { ?>
                     <div class="box photos">
+                        <?php
+                            if(osc_images_enabled_at_items()) {
+                                if(theme_map_is_fineuploader()) {
+                                    // new ajax photo upload
+                                    ItemForm::ajax_photos();
+                                }
+                            } else { ?>
                         <h2><?php _e('Photos', 'theme_map'); ?></h2>
                         <div id="photos">
                             <div class="row">
@@ -135,9 +146,12 @@
                             </div>
                         </div>
                         <a href="#" onclick="addNewPhoto(); uniform_input_file(); return false;"><?php _e('Add new photo', 'theme_map'); ?></a>
-                    </div>
-                    <?php } ?>
 
+                        <?php
+                            }
+                        }
+                        ?>
+                    </div>
                     <div class="box location">
                         <h2><?php _e('Listing Location', 'theme_map'); ?></h2>
                         <div class="row">

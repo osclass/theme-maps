@@ -1,5 +1,16 @@
 <?php
 
+if (theme_map_is_fineuploader()) {
+    if (!OC_ADMIN) {
+        osc_enqueue_style('fine-uploader-css', osc_assets_url('js/fineuploader/fineuploader.css'));
+    }
+    osc_enqueue_script('jquery-fineuploader');
+}
+
+function theme_map_is_fineuploader() {
+    return Scripts::newInstance()->registered['jquery-fineuploader'] && method_exists('ItemForm', 'ajax_photos');
+}
+
 osc_add_hook('init_admin', 'theme_theme_map_actions_admin');
 osc_add_hook('init_admin', 'theme_theme_map_regions_map_admin');
 if (function_exists('osc_admin_menu_appearance')) {
