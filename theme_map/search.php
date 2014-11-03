@@ -212,6 +212,7 @@
                     <?php if(osc_count_items() == 0) { ?>
                         <p class="empty" ><?php printf(__('There are no results matching "%s"', 'theme_map'), osc_search_pattern()); ?></p>
                     <?php } else { ?>
+                        <?php osc_run_hook('search_ads_listing_top'); ?>
                         <?php require(osc_search_show_as() == 'list' ? 'search_list.php' : 'search_gallery.php'); ?>
                         <div class="paginate" >
                         <?php echo osc_search_pagination(); ?>

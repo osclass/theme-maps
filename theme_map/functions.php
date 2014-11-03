@@ -52,6 +52,12 @@
                 osc_set_preference('footer_link', ($footerLink ? '1' : '0'), 'theme_map');
                 osc_set_preference('default_logo', ($defaultLogo ? '1' : '0'), 'theme_map');
 
+                osc_set_preference('header-728x90',         trim(Params::getParam('header-728x90', false, false, false)),                  'theme_map');
+                osc_set_preference('homepage-728x90',       trim(Params::getParam('homepage-728x90', false, false, false)),                'theme_map');
+                osc_set_preference('sidebar-300x250',       trim(Params::getParam('sidebar-300x250', false, false, false)),                'theme_map');
+                osc_set_preference('search-results-top-728x90',     trim(Params::getParam('search-results-top-728x90', false, false, false)),          'theme_map');
+                osc_set_preference('search-results-middle-728x90',  trim(Params::getParam('search-results-middle-728x90', false, false, false)),       'theme_map');
+
                 osc_add_flash_ok_message(__('Theme settings updated correctly', 'theme_map'), 'admin');
                 header('Location: ' . osc_admin_render_theme_url('oc-content/themes/theme_map/admin/settings.php')); exit;
             break;
@@ -118,4 +124,40 @@
     require_once WebThemes::newInstance()->getCurrentThemePath() . 'inc.functions.php';
 
     check_install_theme_map_theme();
+
+    /* ads  SEARCH */
+    function search_ads_listing_top_fn() {
+        if(osc_get_preference('search-results-top-728x90', 'theme_map')!='') {
+            echo '<div class="clear"></div>' . PHP_EOL;
+            echo '<div class="ads_728">' . PHP_EOL;
+            echo osc_get_preference('search-results-top-728x90', 'theme_map');
+            echo '</div>' . PHP_EOL;
+        }
+    }
+    osc_add_hook('search_ads_listing_top', 'search_ads_listing_top_fn');
+
+    function search_ads_listing_medium_fn() {
+        if(osc_get_preference('search-results-middle-728x90', 'theme_map')!='') {
+            echo '<div class="clear"></div>' . PHP_EOL;
+            echo '<div class="ads_728">' . PHP_EOL;
+            echo osc_get_preference('search-results-middle-728x90', 'theme_map');
+            echo '</div>' . PHP_EOL;
+        }
+    }
+    osc_add_hook('search_ads_listing_medium', 'search_ads_listing_medium_fn');
+
+    /* remove theme */
+    function theme_map_delete_theme() {
+        osc_remove_preference('keyword_placeholder', 'theme_map');
+        osc_remove_preference('footer_link', 'theme_map');
+        osc_remove_preference('default_logo', 'theme_map');
+        osc_remove_preference('donation', 'theme_map');
+
+        osc_remove_preference('header-728x90', 'theme_map');
+        osc_remove_preference('homepage-728x90', 'theme_map');
+        osc_remove_preference('sidebar-300x250', 'theme_map');
+        osc_remove_preference('search-results-top-728x90', 'theme_map');
+        osc_remove_preference('search-results-middle-728x90', 'theme_map'); 
+    }
+    osc_add_hook('theme_delete_theme_map', 'theme_map_delete_theme');
 ?>

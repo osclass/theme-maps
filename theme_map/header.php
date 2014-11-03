@@ -22,6 +22,11 @@
 <!-- container -->
 <div class="container">
 <!-- header -->
+
+<!-- header ad 728x60-->
+<?php echo osc_get_preference('header-728x90', 'theme_map'); ?>
+<!-- /header ad 728x60-->
+
 <div id="header">
     <a id="logo" href="<?php echo osc_base_url(); ?>">
     <?php echo logo_header(); ?>

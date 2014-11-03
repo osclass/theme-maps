@@ -1,7 +1,7 @@
 {
   "name": "osclass",
-  "version_modern": "4.0.1",
-  "version_modern_maps": "2.0",
+  "version_modern": "5.0.0",
+  "version_modern_maps": "3.0",
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-text-replace": "~0.3.7",

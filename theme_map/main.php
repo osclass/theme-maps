@@ -32,7 +32,7 @@
             <?php osc_current_web_theme_path('inc.search.php'); ?>
         </div>
         <div class="content home">
-            <div id="main">
+            <div id="main" class="home-left-side">
                 <?php osc_current_web_theme_path('inc.main.php') ; ?>
                <div class="latest_ads">
                     <h1><strong><?php _e('Latest Listings', 'theme_map'); ?></strong></h1>
@@ -72,7 +72,14 @@
                     <?php View::newInstance()->_erase('items'); } ?>
                 </div>
             </div>
-            <div id="sidebar">
+            <div id="sidebar" class="home-right-side">
+                <?php if( osc_get_preference('sidebar-300x250', 'theme_map') != '') {?>
+                <!-- sidebar ad 350x250 -->
+                <div class="ads_300">
+                    <?php echo osc_get_preference('sidebar-300x250', 'theme_map'); ?>
+                </div>
+                <!-- /sidebar ad 350x250 -->
+                <?php } ?>
                 <div class="navigation">
                     <?php if(osc_count_list_regions() > 0 ) { ?>
                     <div class="box location">
@@ -86,6 +93,14 @@
                     <?php } ?>
                 </div>
             </div>
+            <div class="clear"></div>
+            <?php if( osc_get_preference('homepage-728x90', 'theme_map') != '') { ?>
+            <!-- homepage ad 728x60-->
+            <div class="ads_728">
+                <?php echo osc_get_preference('homepage-728x90', 'theme_map'); ?>
+            </div>
+            <!-- /homepage ad 728x60-->
+            <?php } ?>
         </div>
         <?php osc_current_web_theme_path('footer.php') ; ?>
     </body>

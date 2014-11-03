@@ -53,8 +53,8 @@
 <?php } ?>
 <table border="0" cellspacing="0">
     <tbody>
-        <?php $class = "even"; ?>
-        <?php while(osc_has_items()) { ?>
+        <?php $class = "even"; $i = 0; ?>
+        <?php while(osc_has_items()) { $i++; ?>
             <tr class="<?php echo $class; ?>">
                 <?php if( osc_images_enabled_at_items() ) { ?>
                  <td class="photo">
@@ -76,6 +76,13 @@
                  </td>
              </tr>
             <?php $class = ($class == 'even') ? 'odd' : 'even'; ?>
+             <?php if( $i == 5 ) { ?>
+    </tbody>
+</table>
+            <?php osc_run_hook('search_ads_listing_medium'); ?>
+<table border="0" cellspacing="0">
+    <tbody>
+            <?php } ?>
         <?php } ?>
     </tbody>
 </table>

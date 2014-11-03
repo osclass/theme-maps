@@ -48,7 +48,7 @@
         <meta name="robots" content="index, follow" />
         <meta name="googlebot" content="index, follow" />
     </head>
-    <body>
+    <body class="item-page">
         <?php osc_current_web_theme_path('header.php'); ?>
         <div class="content item">
             <div id="item_head">
@@ -187,6 +187,13 @@
                         <?php } ?>
                     </div>
                     <?php } ?>
+                <?php } ?>
+                <?php if( osc_get_preference('sidebar-300x250', 'theme_map') != '') {?>
+                <!-- sidebar ad 350x250 -->
+                <div class="ads_300">
+                    <?php echo osc_get_preference('sidebar-300x250', 'theme_map'); ?>
+                </div>
+                <!-- /sidebar ad 350x250 -->
                 <?php } ?>
                 <div id="contact">
                     <h2><?php _e("Contact publisher", 'theme_map'); ?></h2>
