@@ -1,4 +1,4 @@
-<?php if( !osc_get_preference('footer_link', 'theme_map') ) { ?>
+<?php if( (!defined('MULTISITE') || MULTISITE == 0)&& !osc_get_preference('footer_link', 'theme_map') ) { ?>
 <form name="_xclick" action="https://www.paypal.com/in/cgi-bin/webscr" method="post">
     <input type="hidden" name="cmd" value="_donations">
     <input type="hidden" name="rm" value="2">
@@ -28,6 +28,7 @@
                 <div class="form-label"><?php _e('Search placeholder', 'theme_map'); ?></div>
                 <div class="form-controls"><input type="text" class="xlarge" name="keyword_placeholder" value="<?php echo osc_esc_html( osc_get_preference('keyword_placeholder', 'theme_map') ); ?>"></div>
             </div>
+            <?php if(!defined('MULTISITE') || MULTISITE == 0) { ?>
             <div class="form-row">
                 <div class="form-label"><?php _e('Footer link', 'theme_map'); ?></div>
                 <div class="form-controls">
@@ -35,9 +36,24 @@
                     <span class="help-box"><?php _e('This website is proudly using the <a title="OSClass web" href="http://osclass.org/">classifieds scripts</a> software <strong>OSClass</strong>', 'theme_map'); ?></span>
                 </div>
             </div>
+            <?php } ?>
         </div>
     </fieldset>
 
+    <h2 class="render-title"><?php _e('Location input', 'theme_map'); ?></h2>
+    <fieldset>
+        <div class="form-horizontal">
+            <div class="form-row">
+                <div class="form-label"><?php _e('Show location input as:', 'theme_map'); ?></div>
+                <div class="form-controls">
+                    <select name="defaultLocationShowAs">
+                        <option value="dropdown" <?php if(theme_map_default_location_show_as() == 'dropdown'){ echo 'selected="selected"' ; } ?>><?php _e('Dropdown','theme_map'); ?></option>
+                        <option value="autocomplete" <?php if(theme_map_default_location_show_as() == 'autocomplete'){ echo 'selected="selected"' ; } ?>><?php _e('Autocomplete','theme_map'); ?></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </fieldset>
 
     <h2 class="render-title"><?php _e('Ads management', 'theme_map'); ?></h2>
     <div class="form-row">

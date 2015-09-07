@@ -52,6 +52,8 @@
                 osc_set_preference('footer_link', ($footerLink ? '1' : '0'), 'theme_map');
                 osc_set_preference('default_logo', ($defaultLogo ? '1' : '0'), 'theme_map');
 
+                osc_set_preference('defaultLocationShowAs', Params::getParam('defaultLocationShowAs'), 'theme_map');
+
                 osc_set_preference('header-728x90',         trim(Params::getParam('header-728x90', false, false, false)),                  'theme_map');
                 osc_set_preference('homepage-728x90',       trim(Params::getParam('homepage-728x90', false, false, false)),                'theme_map');
                 osc_set_preference('sidebar-300x250',       trim(Params::getParam('sidebar-300x250', false, false, false)),                'theme_map');
@@ -107,6 +109,7 @@
             osc_set_preference('footer_link', true, 'theme_map');
             osc_set_preference('donation', '0', 'theme_map');
             osc_set_preference('default_logo', '1', 'theme_map');
+            osc_set_preference('defaultLocationShowAs', 'dropdown', 'theme_map');
             osc_reset_preferences();
         }
     }
@@ -118,12 +121,21 @@
             if( !$current_version ) {
                 theme_map_theme_install();
             }
+            if( osc_get_preference('defaultLocationShowAs','theme_map')=='') {
+                osc_set_preference('defaultLocationShowAs', 'dropdown', 'theme_map');
+            }
         }
     }
 
     require_once WebThemes::newInstance()->getCurrentThemePath() . 'inc.functions.php';
 
     check_install_theme_map_theme();
+
+    if(!function_exists('theme_map_default_location_show_as')) {
+        function theme_map_default_location_show_as() {
+            return osc_get_preference('defaultLocationShowAs','theme_map');
+        }
+    }
 
     /* ads  SEARCH */
     if (!function_exists('search_ads_listing_top_fn')) {
@@ -157,11 +169,13 @@
         osc_remove_preference('default_logo', 'theme_map');
         osc_remove_preference('donation', 'theme_map');
 
+        osc_remove_preference('defaultLocationShowAs', 'theme_map');
+
         osc_remove_preference('header-728x90', 'theme_map');
         osc_remove_preference('homepage-728x90', 'theme_map');
         osc_remove_preference('sidebar-300x250', 'theme_map');
         osc_remove_preference('search-results-top-728x90', 'theme_map');
-        osc_remove_preference('search-results-middle-728x90', 'theme_map'); 
+        osc_remove_preference('search-results-middle-728x90', 'theme_map');
     }
     osc_add_hook('theme_delete_theme_map', 'theme_map_delete_theme');
 ?>
