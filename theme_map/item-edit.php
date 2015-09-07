@@ -157,26 +157,60 @@
                         ?>
 
                         <div class="box location">
-                            <h2><?php _e('Location', 'theme_map'); ?></h2>
+                            <h2><?php _e('Listing Location', 'theme_map'); ?></h2>
+                            <?php if(count(osc_get_countries()) > 1) { ?>
                             <div class="row">
-                                <label><?php _e('Country', 'theme_map'); ?></label>
-                                <?php ItemForm::country_select(); ?>
+                                <label for="countryId"><?php _e('Country', 'theme_map'); ?></label>
+                                <?php ItemForm::country_select(osc_get_countries(), osc_user()); ?>
                             </div>
                             <div class="row">
-                                <label><?php _e('Region', 'theme_map'); ?></label>
-                                <?php ItemForm::region_text(); ?>
+                                <label for="regionId"><?php _e('Region', 'theme_map'); ?></label>
+                                <?php
+                                if (theme_map_default_location_show_as() == 'dropdown') {
+                                    ItemForm::region_select(osc_get_regions(osc_user_field('fk_c_country_code')), osc_user());
+                                } else {
+                                    ItemForm::region_text(osc_user());
+                                }
+                                ?>
+                            </div>
+                            <?php
+                                } else {
+                                    $aCountries = osc_get_countries();
+                                    $aRegions = osc_get_regions($aCountries[0]['pk_c_code']);
+                                    ?>
+                            <input type="hidden" id="countryId" name="countryId" value="<?php echo osc_esc_html($aCountries[0]['pk_c_code']); ?>"/>
+                            <div class="row">
+                                <label for="regionId"><?php _e('Region', 'theme_map'); ?></label>
+                                <?php
+                                if (theme_map_default_location_show_as() == 'dropdown') {
+                                    ItemForm::region_select($aRegions, osc_user());
+                                } else {
+                                    ItemForm::region_text(osc_user());
+                                }
+                                ?>
+                            </div>
+                            <?php } ?>
+                            <div class="row">
+                                <label for="city"><?php _e('City', 'theme_map'); ?></label>
+                                <?php
+                                if (theme_map_default_location_show_as() == 'dropdown') {
+                                    if(Params::getParam('action') != 'item_edit') {
+                                        ItemForm::city_select(array(array('pk_i_id' => '', 's_name' => __("Select a city..."))), osc_item());
+                                    } else { // add new item
+                                        ItemForm::city_select(osc_get_cities(osc_user_region_id()), osc_user());
+                                    }
+                                } else {
+                                    ItemForm::city_text(osc_user());
+                                }
+                                ?>
                             </div>
                             <div class="row">
-                                <label><?php _e('City', 'theme_map'); ?></label>
-                                <?php ItemForm::city_text(); ?>
+                                <label for="city"><?php _e('City Area', 'theme_map'); ?></label>
+                                <?php ItemForm::city_area_text(osc_user()); ?>
                             </div>
                             <div class="row">
-                                <label><?php _e('City area', 'theme_map'); ?></label>
-                                <?php ItemForm::city_area_text(); ?>
-                            </div>
-                            <div class="row">
-                                <label><?php _e('Address', 'theme_map'); ?></label>
-                                <?php ItemForm::address_text(); ?>
+                                <label for="address"><?php _e('Address', 'theme_map'); ?></label>
+                                <?php ItemForm::address_text(osc_user()); ?>
                             </div>
                         </div>
                         <?php ItemForm::plugin_edit_item(); ?>

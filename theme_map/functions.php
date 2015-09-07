@@ -35,7 +35,8 @@
             osc_add_hook('footer', 'add_close_button_action');
         }
     }
-
+    
+    osc_add_hook('init_admin', 'theme_theme_map_actions_admin');
     function theme_theme_map_actions_admin() {
         if( Params::getParam('file') == 'oc-content/themes/theme_map/admin/settings.php' ) {
             if( Params::getParam('donation') == 'successful' ) {
@@ -53,6 +54,7 @@
                 osc_set_preference('default_logo', ($defaultLogo ? '1' : '0'), 'theme_map');
 
                 osc_set_preference('defaultLocationShowAs', Params::getParam('defaultLocationShowAs'), 'theme_map');
+                echo Params::getParam('defaultLocationShowAs') . "...";
 
                 osc_set_preference('header-728x90',         trim(Params::getParam('header-728x90', false, false, false)),                  'theme_map');
                 osc_set_preference('homepage-728x90',       trim(Params::getParam('homepage-728x90', false, false, false)),                'theme_map');
