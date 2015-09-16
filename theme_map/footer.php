@@ -30,7 +30,7 @@
         <?php while( osc_has_static_pages() ) { ?>
             | <a href="<?php echo osc_static_page_url(); ?>"><?php echo osc_static_page_title(); ?></a>
         <?php } ?>
-        <?php if( (!defined('MULTISITE') || MULTISITE == 0) && osc_get_preference('footer_link', 'theme_map') ) {
+        <?php if( (!defined('MULTISITE') || MULTISITE==0) && osc_get_preference('footer_link', 'theme_map') ) {
                 echo ' | ' . __('This website is proudly using the <a title="Osclass web" href="http://osclass.org/">classifieds scripts</a> software <strong>Osclass</strong>', 'theme_map');
             }
         ?>

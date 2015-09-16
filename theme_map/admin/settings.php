@@ -1,4 +1,4 @@
-<?php if( (!defined('MULTISITE') || MULTISITE == 0)&& !osc_get_preference('footer_link', 'theme_map') ) { ?>
+<?php if( (!defined('MULTISITE') || MULTISITE==0)&& !osc_get_preference('footer_link', 'theme_map') ) { ?>
 <form name="_xclick" action="https://www.paypal.com/in/cgi-bin/webscr" method="post">
     <input type="hidden" name="cmd" value="_donations">
     <input type="hidden" name="rm" value="2">
@@ -28,7 +28,7 @@
                 <div class="form-label"><?php _e('Search placeholder', 'theme_map'); ?></div>
                 <div class="form-controls"><input type="text" class="xlarge" name="keyword_placeholder" value="<?php echo osc_esc_html( osc_get_preference('keyword_placeholder', 'theme_map') ); ?>"></div>
             </div>
-            <?php if(!defined('MULTISITE') || MULTISITE == 0) { ?>
+            <?php if(!defined('MULTISITE') || MULTISITE==0) { ?>
             <div class="form-row">
                 <div class="form-label"><?php _e('Footer link', 'theme_map'); ?></div>
                 <div class="form-controls">
