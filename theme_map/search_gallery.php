@@ -55,7 +55,7 @@
     <tbody>
         <?php $class = "even"; ?>
         <?php while(osc_has_items()) { ?>
-            <tr class="<?php echo $class; ?>">
+            <tr class="<?php osc_run_hook("highlight_class"); ?><?php echo $class; ?>">
                 <?php if( osc_images_enabled_at_items() ) { ?>
                  <td class="photo">
                      <?php if(osc_count_item_resources()) { ?>
