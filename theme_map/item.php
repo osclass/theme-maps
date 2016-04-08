@@ -113,6 +113,9 @@
                         <?php     } ?>
                         <?php } ?>
                         <strong class="share"><a href="<?php echo osc_item_send_friend_url(); ?>" rel="nofollow"><?php _e('Share', 'theme_map'); ?></a></strong>
+                        <?php if(function_exists('watchlist')) { ?>
+                        <strong class="share"><?php watchlist(); ?></strong>
+                        <?php } ?>
                     </p>
                     <?php osc_run_hook('location'); ?>
                 </div>
