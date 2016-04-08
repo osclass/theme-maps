@@ -3,10 +3,30 @@
     .theme-files { min-width: 500px; }
 </style>
 <h2 class="render-title"><?php _e('Header logo', 'theme_map'); ?></h2>
-<?php if( is_writable( WebThemes::newInstance()->getCurrentThemePath() . "images/") ) { ?>
-    <?php if(file_exists( WebThemes::newInstance()->getCurrentThemePath() . "images/logo.jpg" ) ) { ?>
+
+<?php if( !is_writable( WebThemes::newInstance()->getCurrentThemePath() . "images/") && (!defined('MULTISITE') || MULTISITE==0)) { ?>
+    <div class="flashmessage flashmessage-error" style="display: block;">
+        <p>
+            <?php
+                $msg  = sprintf(__('The images folder <strong>%s</strong> is not writable on your server', 'theme_map'), WebThemes::newInstance()->getCurrentThemePath() ."images/" ) .", ";
+                $msg .= __("OSClass can't upload the logo image from the administration panel.", 'theme_map') . ' ';
+                $msg .= __("Please make the aforementioned image folder writable.", 'theme_map') . ' ';
+                echo $msg;
+            ?>
+        </p>
+        <p>
+            <?php _e('To make a directory writable under UNIX execute this command from the shell:','theme_map'); ?>
+        </p>
+        <p class="command">
+            chmod a+w <?php echo WebThemes::newInstance()->getCurrentThemePath() ."images/" ; ?>
+        </p>
+    </div>
+<?php } ?>
+
+    <?php if(file_exists( WebThemes::newInstance()->getCurrentThemePath() . "images/logo.jpg" ) ||
+                file_exists( osc_uploads_path() . "logo.jpg") ) { ?>
         <h3 class="render-title"><?php _e('Preview', 'theme_map') ?></h3>
-        <img border="0" alt="<?php echo osc_esc_html( osc_page_title() ); ?>" src="<?php echo osc_current_web_theme_url('images/logo.jpg');?>" />
+        <?php echo logo_header(); ?>
         <form action="<?php echo osc_admin_render_theme_url('oc-content/themes/theme_map/admin/header.php');?>" method="post" enctype="multipart/form-data">
             <input type="hidden" name="action_specific" value="remove" />
             <fieldset>
@@ -46,21 +66,3 @@
             </div>
         </fieldset>
     </form>
-<?php } else { ?>
-    <div class="flashmessage flashmessage-error" style="display: block;">
-        <p>
-            <?php
-                $msg  = sprintf(__('The images folder <strong>%s</strong> is not writable on your server', 'theme_map'), WebThemes::newInstance()->getCurrentThemePath() ."images/" ) .", ";
-                $msg .= __("OSClass can't upload the logo image from the administration panel.", 'theme_map') . ' ';
-                $msg .= __("Please make the aforementioned image folder writable.", 'theme_map') . ' ';
-                echo $msg;
-            ?>
-        </p>
-        <p>
-            <?php _e('To make a directory writable under UNIX execute this command from the shell:','theme_map'); ?>
-        </p>
-        <p class="command">
-            chmod a+w <?php echo WebThemes::newInstance()->getCurrentThemePath() ."images/" ; ?>
-        </p>
-    </div>
-<?php } ?>

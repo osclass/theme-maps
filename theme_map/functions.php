@@ -35,7 +35,7 @@
             osc_add_hook('footer', 'add_close_button_action');
         }
     }
-    
+
     osc_add_hook('init_admin', 'theme_theme_map_actions_admin');
     function theme_theme_map_actions_admin() {
         if( Params::getParam('file') == 'oc-content/themes/theme_map/admin/settings.php' ) {
@@ -68,7 +68,8 @@
             case('upload_logo'):
                 $package = Params::getFiles('logo');
                 if( $package['error'] == UPLOAD_ERR_OK ) {
-                    if( move_uploaded_file($package['tmp_name'], WebThemes::newInstance()->getCurrentThemePath() . "images/logo.jpg" ) ) {
+                    $path = osc_uploads_path() . "logo.jpg" ;
+                    if( move_uploaded_file($package['tmp_name'], $path ) ) {
                         osc_add_flash_ok_message(__('The logo image has been uploaded correctly', 'theme_map'), 'admin');
                     } else {
                         osc_add_flash_error_message(__("An error has occurred, please try again", 'theme_map'), 'admin');
@@ -82,6 +83,9 @@
                 if(file_exists( WebThemes::newInstance()->getCurrentThemePath() . "images/logo.jpg" ) ) {
                     @unlink( WebThemes::newInstance()->getCurrentThemePath() . "images/logo.jpg" );
                     osc_add_flash_ok_message(__('The logo image has been removed', 'theme_map'), 'admin');
+                } else if(file_exists( osc_uploads_path() . "logo.jpg" ) ) {
+                    @unlink( osc_uploads_path() . "logo.jpg" );
+                    osc_add_flash_ok_message(__('The logo image has been removed', 'theme_map'), 'admin');
                 } else {
                     osc_add_flash_error_message(__("Image not found", 'theme_map'), 'admin');
                 }
@@ -94,6 +98,10 @@
         function logo_header() {
             $html = '<img border="0" alt="' . osc_page_title() . '" src="' . osc_current_web_theme_url('images/logo.jpg') . '" />';
             if( file_exists( WebThemes::newInstance()->getCurrentThemePath() . "images/logo.jpg" ) ) {
+                return $html;
+            } else if( file_exists( osc_uploads_path() . "logo.jpg" ) ) {
+                $path = str_replace(ABS_PATH, '', osc_uploads_path() . '/');
+                $html = '<img border="0" alt="' . osc_page_title() . '" src="' . osc_base_url() . $path . "logo.jpg" . '" />';
                 return $html;
             } else if( osc_get_preference('default_logo', 'theme_map') && (file_exists( WebThemes::newInstance()->getCurrentThemePath() . "images/default-logo.jpg")) ) {
                 return '<img border="0" alt="' . osc_page_title() . '" src="' . osc_current_web_theme_url('images/default-logo.jpg') . '" />';
